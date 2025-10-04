@@ -19,6 +19,7 @@ interface Painting {
     artist: string;
     year: number;
     description: string;
+    link: string;
   };
 }
 
@@ -29,13 +30,10 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
   const [isShowingOriginal, setIsShowingOriginal] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
 
-  // --- Logic chuyển ảnh ---
   const changePainting = useCallback((newIndex: number) => {
     if (newIndex === currentPaintingIndex) return;
     setCurrentPaintingIndex(newIndex);
     setIsShowingOriginal(false);
-    // Giữ trạng thái mô tả khi chuyển ảnh nếu cần, hoặc ẩn đi:
-    // setShowStory(false); 
   }, [currentPaintingIndex]);
 
   const nextPainting = useCallback(() => {
@@ -48,7 +46,6 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
     changePainting(newIndex);
   }, [currentPaintingIndex, paintings.length, changePainting]);
 
-  // --- Logic lật ảnh ---
   const toggleOriginalImage = () => {
     if (!currentPainting.originalSrc || isFlipping) return;
 
@@ -72,7 +69,6 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
     ? currentPainting.originalSrc
     : currentPainting.src;
 
-  // Keyboard navigation (Giữ nguyên)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
@@ -93,23 +89,16 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
     <div className="h-screen relative overflow-y-auto gallery-background flex flex-col">
       <div className="absolute inset-0 bg-black/40"></div>
 
-      {/* 1. HEADER - Cố định ở trên cùng */}
       <div className="relative z-30 w-full">
         <Header />
       </div>
 
-      {/* 2. MAIN CONTENT - Chứa Ảnh và Mô tả (Sử dụng Flex để đặt Ngang hàng) */}
-      {/* Đã loại bỏ 'overflow-y-scroll' và thay thế 'main' bằng div cố định */}
       <div className="flex-grow relative z-10 p-4 md:p-8 flex items-center justify-center">
 
-        {/* Vùng chứa Ảnh và Mô tả (Nguyên tắc Ngang hàng) */}
-        {/* Sử dụng flex-col trên mobile, chuyển sang flex-row trên màn hình lớn (lg) */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center w-full max-w-7xl 2xl:max-w-8xl gap-4">
 
-          {/* VÙNG ẢNH CHÍNH (Chiếm 50% trên màn hình lớn) */}
           <div className="relative w-full lg:w-1/2 flex-shrink-0">
 
-            {/* Khung ảnh - Căn giữa trong cột của nó */}
             <div className="w-full h-full flex justify-center items-center">
               <PaintingFrame
                 key={currentPainting.id + currentImageSrc}
@@ -120,20 +109,16 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
               />
             </div>
 
-            {/* Nút điều hướng Trái */}
             <Button
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
-                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
               onClick={prevPainting}
               aria-label="Previous painting"
             >
               <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
             </Button>
 
-            {/* Nút điều hướng Phải */}
             <Button
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
-                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
               onClick={nextPainting}
               aria-label="Next painting"
             >
@@ -141,11 +126,8 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
             </Button>
           </div>
 
-          {/* VÙNG MÔ TẢ (STORY) & NÚT - Chiếm 50% trên màn hình lớn */}
-          {/* Đã loại bỏ max-w cố định, sử dụng w-full / lg:w-1/2 */}
           <div className={`w-full lg:w-1/2 mt-4 lg:mt-0 flex flex-col justify-center items-center transition-all duration-300 ease-in-out`}>
 
-            {/* HAI NÚT TƯƠNG TÁC - Cố định ở đầu cột này */}
             <div className="mb-4 flex items-center gap-4 justify-center w-full">
               <Button
                 size="sm"
@@ -174,8 +156,6 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
               </Button>
             </div>
 
-            {/* PHẦN MÔ TẢ */}
-            {/* Đã thêm 'w-full' để nó mở rộng theo cột cha (lg:w-1/2) */}
             <div
               className={`w-full transition-all duration-300 ease-in-out overflow-hidden ${showStory ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'}`}
               aria-hidden={!showStory}
@@ -186,13 +166,22 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
                   {currentPainting.info.artist} - {currentPainting.info.year}
                 </p>
                 <p>{currentPainting.info.description}</p>
+                <p className="mt-3">
+                  <a
+                    href={currentPainting.info.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-amber-400 hover:text-amber-300 underline"
+                  >
+                    Bài viết gốc
+                  </a>
+                </p>
               </Card>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 3. THUMBNAIL BAR - Cố định ở dưới cùng (GIỮ NGUYÊN) */}
       <div className="bottom-0 left-0 right-0 z-20 flex-shrink-0 py-4 px-8 flex items-center justify-center gap-3 overflow-x-auto bg-black/70 backdrop-blur-sm border-t border-gray-700">
         {paintings.map((p, idx) => (
           <button

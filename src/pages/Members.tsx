@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 
-// 1. CẬP NHẬT DỮ LIỆU: Thêm trường 'image' cho ảnh đại diện
 const members = [
   {
     name: "Trần Thị Phương Thảo",
@@ -109,7 +108,7 @@ const Members = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-amber-400 mb-4 font-montserrat">
             Nhóm Phát Triển
           </h1>
-          <p className="text-gray-600 text-lg"> {/* Đã đổi màu chữ cho dễ đọc hơn */}
+          <p className="text-gray-600 text-lg">
             Nhóm sinh viên tại gian hàng của Hội Sử Mùa Thu - 
             <span className="text-amber-400 font-semibold">
               Hồi Ảnh Việt
