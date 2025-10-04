@@ -123,7 +123,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-x-hidden">
       <Header />
 
       <div
@@ -141,7 +141,7 @@ const Index = () => {
         <div className="relative z-20 flex flex-col items-center justify-center w-full">
           <div className="max-w-7xl mx-auto relative z-20">
             <div className="relative w-full max-w-6xl mx-auto">
-              <div className="flex justify-center items-start space-x-24 relative z-20">
+              <div className="flex flex-col items-center lg:flex-row lg:justify-center lg:items-start lg:space-x-24 space-y-8 lg:space-y-0 relative z-20">
                 <div className="relative group">
                   <div className="w-56 h-72 bg-black border-4 border-gray-800 shadow-2xl transform hover:scale-105 transition-transform duration-300 overflow-hidden">
                     <img
@@ -359,7 +359,7 @@ const Index = () => {
               Một số thông tin triển lãm
             </h3>
             <div
-              className={`columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 ${getAnimationClasses(
+              className={`columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6 sm:gap-6 sm:space-y-6 ${getAnimationClasses(
                 "image-grid"
               )}`}
               data-animate-id="image-grid"

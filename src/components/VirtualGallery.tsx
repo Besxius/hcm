@@ -90,7 +90,7 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
 
 
   return (
-    <div className="h-screen relative overflow-hidden gallery-background flex flex-col">
+    <div className="h-screen relative overflow-y-auto gallery-background flex flex-col">
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* 1. HEADER - Cố định ở trên cùng */}
@@ -189,12 +189,11 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
               </Card>
             </div>
           </div>
-
         </div>
       </div>
 
       {/* 3. THUMBNAIL BAR - Cố định ở dưới cùng (GIỮ NGUYÊN) */}
-      <div className="fixed bottom-0 left-0 right-0 z-20 flex-shrink-0 py-4 px-8 flex items-center justify-center gap-3 overflow-x-auto bg-black/70 backdrop-blur-sm border-t border-gray-700">
+      <div className="bottom-0 left-0 right-0 z-20 flex-shrink-0 py-4 px-8 flex items-center justify-center gap-3 overflow-x-auto bg-black/70 backdrop-blur-sm border-t border-gray-700">
         {paintings.map((p, idx) => (
           <button
             key={p.id}
