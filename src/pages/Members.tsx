@@ -8,19 +8,19 @@ const members = [
   {
     name: "Trần Thị Phương Thảo",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/phuongthao.png"
   },
   {
     name: "Lê Nguyễn Phương An",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/phuongan.png"
   },
   {
     name: "Phan Thị Ngọc Giàu",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/ngocgiau.png"
   },
   {
@@ -32,13 +32,13 @@ const members = [
   {
     name: "Bùi Ngọc Nhi",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/ngocnhi.png"
   },
   {
     name: "Nguyễn Hạnh Duyên",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/hanhduyen.png"
   },
   {
@@ -50,7 +50,7 @@ const members = [
   {
     name: "Nguyễn Lê Thu Hằng",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/thuhang.png"
   },
   {
@@ -68,13 +68,13 @@ const members = [
   {
     name: "Trần Nguyễn Thảo Nhi",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/thaonhi.png"
   },
   {
     name: "Trần Ngọc Châu Anh",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/chauanh.png"
   },
   {
@@ -86,7 +86,7 @@ const members = [
   {
     name: "Nguyễn Khánh Luân",
     role: "Thành viên",
-    description: "Ý tưởng và triển khai, vận hành dự án",
+    description: "Ý tưởng, triển khai và vận hành dự án",
     image: "/assets/members/luankhanh.png"
   },
   {

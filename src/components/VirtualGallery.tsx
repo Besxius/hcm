@@ -34,6 +34,8 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
     if (newIndex === currentPaintingIndex) return;
     setCurrentPaintingIndex(newIndex);
     setIsShowingOriginal(false);
+    // Giữ trạng thái mô tả khi chuyển ảnh nếu cần, hoặc ẩn đi:
+    // setShowStory(false); 
   }, [currentPaintingIndex]);
 
   const nextPainting = useCallback(() => {
@@ -58,12 +60,12 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
   };
 
   const currentPainting = paintings[currentPaintingIndex];
-  const hasOriginal = !!currentPainting.originalSrc; 
-  
+  const hasOriginal = !!currentPainting.originalSrc;
+
   useEffect(() => {
-      if (!hasOriginal && isShowingOriginal) {
-          setIsShowingOriginal(false);
-      }
+    if (!hasOriginal && isShowingOriginal) {
+      setIsShowingOriginal(false);
+    }
   }, [currentPaintingIndex, hasOriginal, isShowingOriginal]);
 
   const currentImageSrc = isShowingOriginal && hasOriginal
@@ -86,7 +88,7 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextPainting, prevPainting]);
 
-  // --- Bố cục Fixed ---
+
   return (
     <div className="h-screen relative overflow-hidden gallery-background flex flex-col">
       <div className="absolute inset-0 bg-black/40"></div>
@@ -96,109 +98,109 @@ export const VirtualGallery = ({ initialPaintings }: { initialPaintings: Paintin
         <Header />
       </div>
 
-      {/* 2. MAIN CONTENT - Phần cuộn được */}
-      <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-8 relative overflow-y-auto z-10 
-                       pb-[7rem]"> 
-        
-        {/* Vùng chứa toàn bộ các thành phần (Ảnh, Mô tả, Nút) */}
-        <div className="flex flex-col items-center w-full max-w-5xl 2xl:max-w-6xl">
+      {/* 2. MAIN CONTENT - Chứa Ảnh và Mô tả (Sử dụng Flex để đặt Ngang hàng) */}
+      {/* Đã loại bỏ 'overflow-y-scroll' và thay thế 'main' bằng div cố định */}
+      <div className="flex-grow relative z-10 p-4 md:p-8 flex items-center justify-center">
 
-            {/* Vùng ảnh chính */}
-            <div className="relative w-full flex-shrink-0">
-                
-                {/* 💥 THAY ĐỔI: Tăng kích thước nút trái */}
-                <Button
-                    // Thay size="icon" bằng size tùy chỉnh
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
-                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
-                    onClick={prevPainting}
-                    aria-label="Previous painting"
-                >
-                    <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
-                </Button>
+        {/* Vùng chứa Ảnh và Mô tả (Nguyên tắc Ngang hàng) */}
+        {/* Sử dụng flex-col trên mobile, chuyển sang flex-row trên màn hình lớn (lg) */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-center w-full max-w-7xl 2xl:max-w-8xl gap-4">
 
-                {/* Khung ảnh - Hiệu ứng trượt/chuyển cảnh */}
-                <div className="w-full h-full">
-                    <PaintingFrame
-                    key={currentPainting.id + currentImageSrc} 
-                    imageSrc={currentImageSrc}
-                    paintingInfo={currentPainting.info}
-                    className={`w-full max-w-[48rem] 2xl:max-w-[56rem] mx-auto transition-all duration-500 ease-in-out ${isFlipping ? 'flipping' : ''}`}
-                    isFlipping={isFlipping}
-                    />
-                </div>
+          {/* VÙNG ẢNH CHÍNH (Chiếm 50% trên màn hình lớn) */}
+          <div className="relative w-full lg:w-1/2 flex-shrink-0">
 
-                {/* 💥 THAY ĐỔI: Tăng kích thước nút phải */}
-                <Button
-                    // Thay size="icon" bằng size tùy chỉnh
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
-                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
-                    onClick={nextPainting}
-                    aria-label="Next painting"
-                >
-                    <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
-                </Button>
+            {/* Khung ảnh - Căn giữa trong cột của nó */}
+            <div className="w-full h-full flex justify-center items-center">
+              <PaintingFrame
+                key={currentPainting.id + currentImageSrc}
+                imageSrc={currentImageSrc}
+                paintingInfo={currentPainting.info}
+                className={`w-full max-w-[48rem] mx-auto transition-all duration-500 ease-in-out ${isFlipping ? 'flipping' : ''}`}
+                isFlipping={isFlipping}
+              />
             </div>
 
-            {/* VÙNG MÔ TẢ (STORY) & NÚT */}
-            <div className={`w-full max-w-[48rem] 2xl:max-w-[56rem] mt-4 flex-shrink-0 transition-all duration-300 ease-in-out`}>
-                
-                {/* PHẦN MÔ TẢ */}
-                <div 
-                    className={`transition-all duration-300 ease-in-out overflow-hidden ${showStory ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
-                    aria-hidden={!showStory}
-                >
-                    <Card className="p-4 bg-black/70 backdrop-blur-sm border-gray-700 text-sm text-gray-300">
-                        <h3 className="text-xl font-bold text-amber-500 mb-1">{currentPainting.info.title}</h3>
-                        <p className="text-sm text-gray-400 mb-3">
-                            {currentPainting.info.artist} - {currentPainting.info.year}
-                        </p>
-                        <p>{currentPainting.info.description}</p>
-                    </Card>
-                </div>
-                
-                {/* HAI NÚT TƯƠNG TÁC - Đặt ngay dưới vùng Mô tả */}
-                <div className="mt-4 mb-8 flex items-center gap-4 justify-center">
-                    
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black transition-all duration-300"
-                        onClick={() => setShowStory(!showStory)}
-                    >
-                        <PanelsTopLeft className="w-4 h-4 mr-2" />
-                        {showStory ? "Ẩn Mô tả" : "Hiện Mô tả"}
-                    </Button>
+            {/* Nút điều hướng Trái */}
+            <Button
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
+                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
+              onClick={prevPainting}
+              aria-label="Previous painting"
+            >
+              <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+            </Button>
 
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={!hasOriginal} 
-                        className={`border-amber-500 transition-all duration-300 ${!hasOriginal
-                            ? "text-gray-500 border-gray-500 cursor-not-allowed bg-black/50" 
-                            : isShowingOriginal
-                                ? "bg-amber-500 text-black hover:bg-amber-600" 
-                                : "text-amber-500 hover:bg-amber-500 hover:text-black" 
-                            }`}
-                        onClick={toggleOriginalImage}
-                    >
-                        <Eye className="w-4 h-4 mr-2" />
-                        {isShowingOriginal ? "Xem Đã xử lý" : "Xem Bản gốc"}
-                    </Button>
-                </div>
+            {/* Nút điều hướng Phải */}
+            <Button
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:bg-white/30 transition-colors 
+                                p-3 w-12 h-12 md:w-16 md:h-16 rounded-full bg-black/30 md:bg-transparent hover:bg-black/50"
+              onClick={nextPainting}
+              aria-label="Next painting"
+            >
+              <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+            </Button>
+          </div>
+
+          {/* VÙNG MÔ TẢ (STORY) & NÚT - Chiếm 50% trên màn hình lớn */}
+          {/* Đã loại bỏ max-w cố định, sử dụng w-full / lg:w-1/2 */}
+          <div className={`w-full lg:w-1/2 mt-4 lg:mt-0 flex flex-col justify-center items-center transition-all duration-300 ease-in-out`}>
+
+            {/* HAI NÚT TƯƠNG TÁC - Cố định ở đầu cột này */}
+            <div className="mb-4 flex items-center gap-4 justify-center w-full">
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-amber-500 text-amber-500 hover:bg-amber-500 hover:text-black transition-all duration-300"
+                onClick={() => setShowStory(!showStory)}
+              >
+                <PanelsTopLeft className="w-4 h-4 mr-2" />
+                {showStory ? "Ẩn Mô tả" : "Hiện Mô tả"}
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={!hasOriginal}
+                className={`border-amber-500 transition-all duration-300 ${!hasOriginal
+                  ? "text-gray-500 border-gray-500 cursor-not-allowed bg-black/50"
+                  : isShowingOriginal
+                    ? "bg-amber-500 text-black hover:bg-amber-600"
+                    : "text-amber-500 hover:bg-amber-500 hover:text-black"
+                  }`}
+                onClick={toggleOriginalImage}
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                {isShowingOriginal ? "Xem Đã xử lý" : "Xem Bản gốc"}
+              </Button>
             </div>
 
-        </div> 
-      </main>
-      
-      {/* 3. THUMBNAIL BAR - Cố định ở dưới cùng */}
+            {/* PHẦN MÔ TẢ */}
+            {/* Đã thêm 'w-full' để nó mở rộng theo cột cha (lg:w-1/2) */}
+            <div
+              className={`w-full transition-all duration-300 ease-in-out overflow-hidden ${showStory ? 'max-h-[70vh] opacity-100' : 'max-h-0 opacity-0'}`}
+              aria-hidden={!showStory}
+            >
+              <Card className="p-4 bg-black/70 backdrop-blur-sm border-gray-700 text-sm text-gray-300 overflow-y-auto max-h-[60vh]">
+                <h3 className="text-xl font-bold text-amber-500 mb-1">{currentPainting.info.title}</h3>
+                <p className="text-sm text-gray-400 mb-3">
+                  {currentPainting.info.artist} - {currentPainting.info.year}
+                </p>
+                <p>{currentPainting.info.description}</p>
+              </Card>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 3. THUMBNAIL BAR - Cố định ở dưới cùng (GIỮ NGUYÊN) */}
       <div className="fixed bottom-0 left-0 right-0 z-20 flex-shrink-0 py-4 px-8 flex items-center justify-center gap-3 overflow-x-auto bg-black/70 backdrop-blur-sm border-t border-gray-700">
         {paintings.map((p, idx) => (
           <button
             key={p.id}
-            className={`relative w-20 h-16 rounded-md overflow-hidden ring-2 transition-all duration-300 flex-shrink-0 ${idx === currentPaintingIndex
-                ? "ring-yellow-500 scale-105" 
-                : "ring-transparent opacity-70 hover:opacity-100"
+            className={`relative w-20 h-16 rounded-md overflow-hidden ring-2 transition-all duration-300 ${idx === currentPaintingIndex
+              ? "ring-yellow-500 scale-105"
+              : "ring-transparent opacity-70 hover:opacity-100"
               }`}
             onClick={() => {
               changePainting(idx);
