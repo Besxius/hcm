@@ -43,7 +43,7 @@ export const Header = ({ showLogo = true }: HeaderProps) => {
                 className="text-3xl font-bold font-sans-serif transition-colors"
                 style={{ color: "#e7e3e1" }} 
               >
-                Hội Sử Mùa Thu
+                Hồi Ảnh Việt
               </h1>
             </Link>
           </div>
